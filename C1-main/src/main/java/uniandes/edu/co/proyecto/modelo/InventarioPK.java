@@ -9,57 +9,21 @@ import jakarta.persistence.ManyToOne;
 @Embeddable
 public class InventarioPK implements Serializable {
     
-    //TODO revisar si se rompe con OneToOne... es más accurate al problema
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name="id_producto", referencedColumnName = "id")
     private Producto id_producto;
 
-     //TODO revisar si se rompe con OneToOne... es más accurate al problema
     @ManyToOne
     @JoinColumn(name="id_bodega", referencedColumnName = "id")
-    private Bodega id_bodega; 
+    private Bodega id_bodega;
 
-    private Double costoPromedio;
-
-    private Integer capacidad;
-
-    private Integer numeroReorden;
-
-    public InventarioPK(){
+    public InventarioPK() {
         super();
     }
 
-    public InventarioPK(Producto id_producto, Bodega id_bodega, Double costoPromedio, Integer capacidad, Integer numeroReorden) {
-        super();
+    public InventarioPK(Producto id_producto, Bodega id_bodega) {
         this.id_producto = id_producto;
         this.id_bodega = id_bodega;
-        this.costoPromedio = costoPromedio;
-        this.capacidad = capacidad;
-        this.numeroReorden = numeroReorden;
-    }
-
-    public Double getCostoPromedio() {
-        return costoPromedio;
-    }
-
-    public void setCostoPromedio(Double costoPromedio) {
-        this.costoPromedio = costoPromedio;
-    }
-
-    public Integer getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(Integer capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public Integer getNumeroReorden() {
-        return numeroReorden;
-    }
-
-    public void setNumeroReorden(Integer numeroReorden) {
-        this.numeroReorden = numeroReorden;
     }
 
     public Producto getId_producto() {
@@ -77,5 +41,23 @@ public class InventarioPK implements Serializable {
     public void setId_bodega(Bodega id_bodega) {
         this.id_bodega = id_bodega;
     }
-    
+
+    // Implementación de equals y hashCode es necesaria para que funcione como clave primaria compuesta
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InventarioPK that = (InventarioPK) o;
+
+        if (!id_producto.equals(that.id_producto)) return false;
+        return id_bodega.equals(that.id_bodega);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id_producto.hashCode();
+        result = 31 * result + id_bodega.hashCode();
+        return result;
+    }
 }

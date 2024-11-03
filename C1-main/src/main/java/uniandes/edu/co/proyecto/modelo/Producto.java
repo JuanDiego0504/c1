@@ -1,60 +1,50 @@
 package uniandes.edu.co.proyecto.modelo;
 
-import java.sql.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.sql.Date;
 
 @Entity
 @Table(name="productos")
 public class Producto {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "producto_generator")
+    @SequenceGenerator(name = "producto_generator", sequenceName = "productos_SEQ", allocationSize = 1)
+    private Long id;
 
     private Integer codigoDeBarras;
-
     private String nombre;
-
     private Integer costoEnBodega;
-
     private Integer precioUnitario;
-
     private String presentacion;
-
     private Integer cantidadPresentacion;
-
     private String unidadPresentacion;
-
     private String especEmpaque;
-
     private Date fechaVencimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria", referencedColumnName = "id")
-    private Categoria categoria;
+    public Producto() {}
 
-    public Producto()
-    {;}
+    // Constructor que acepta Long
+    public Producto(Long id) {
+        this.id = id;
+    }
 
-    public Producto(Integer codigoDeBarras, String nombre, Integer costoEnBodega, Integer precioUnitario,
-            String presentacion, Integer cantidadPresentacion, String unidadPresentacion, String especEmpaque,
-            Date fechaVencimiento, Categoria categoria) {
-        this.codigoDeBarras = codigoDeBarras;
-        this.nombre = nombre;
-        this.costoEnBodega = costoEnBodega;
-        this.precioUnitario = precioUnitario;
-        this.presentacion = presentacion;
-        this.cantidadPresentacion = cantidadPresentacion;
-        this.unidadPresentacion = unidadPresentacion;
-        this.especEmpaque = especEmpaque;
-        this.fechaVencimiento = fechaVencimiento;
-        this.categoria = categoria;
+    // Constructor que acepta Integer y convierte a Long
+    public Producto(Integer id) {
+        this.id = id != null ? id.longValue() : null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getCodigoDeBarras() {
@@ -128,21 +118,4 @@ public class Producto {
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    
 }

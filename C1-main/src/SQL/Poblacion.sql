@@ -89,4 +89,16 @@ VALUES (250, 250000, TO_DATE('2024-01-01', 'YYYY-MM-DD'), 4, 4, 4);
 INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
 VALUES (300, 300000, TO_DATE('2024-02-01', 'YYYY-MM-DD'), 5, 5, 5);
 
+-- Datos para la tabla PEDIDOS
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (1, 1, TO_DATE('2023-10-15', 'YYYY-MM-DD'), 'En camino');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (2, 2, TO_DATE('2023-11-20', 'YYYY-MM-DD'), 'Entregado');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (3, 3, TO_DATE('2023-12-05', 'YYYY-MM-DD'), 'Pendiente');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (4, 4, TO_DATE('2024-01-10', 'YYYY-MM-DD'), 'En camino');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (5, 5, TO_DATE('2024-02-15', 'YYYY-MM-DD'), 'Pendiente');
+
 COMMIT;

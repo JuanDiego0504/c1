@@ -1,7 +1,6 @@
 package uniandes.edu.co.proyecto.modelo;
 
 import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,15 +16,13 @@ import jakarta.persistence.Table;
 public class Sucursal {
 
     @Id
-    @GeneratedValue(strategy =GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sucursal_generator")
+    @SequenceGenerator(name = "sucursal_generator", sequenceName = "sucursales_SEQ", allocationSize = 1)
+    private Integer id;  // Cambiado a Integer
 
     private String nombre;
-
     private String direccion;
-
     private String telefono;
-
     private Integer tamanio;
 
     @ManyToOne
@@ -34,8 +32,7 @@ public class Sucursal {
     @OneToMany(mappedBy = "sucursal")
     private List<OrdenDeCompra> ordenesDeCompra;
 
-    public Sucursal()
-    {;}
+    public Sucursal() {}
 
     public Sucursal(String nombre, String direccion, String telefono, Integer tamanio, Ciudad ciudad) {
         this.nombre = nombre;
@@ -45,14 +42,15 @@ public class Sucursal {
         this.ciudad = ciudad;
     }
 
-    public Integer getId() {
+    public Integer getId() {  // Cambiado a Integer
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id) {  // Cambiado a Integer
         this.id = id;
     }
 
+    // Getters y setters restantes
     public String getNombre() {
         return nombre;
     }
@@ -100,5 +98,4 @@ public class Sucursal {
     public void setOrdenesDeCompra(List<OrdenDeCompra> ordenesDeCompra) {
         this.ordenesDeCompra = ordenesDeCompra;
     }
-    
 }

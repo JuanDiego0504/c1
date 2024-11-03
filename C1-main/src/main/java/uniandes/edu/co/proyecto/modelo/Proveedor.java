@@ -1,12 +1,12 @@
 package uniandes.edu.co.proyecto.modelo;
 
 import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,8 +14,9 @@ import jakarta.persistence.Table;
 public class Proveedor {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedor_generator")
+    @SequenceGenerator(name = "proveedor_generator", sequenceName = "proveedores_SEQ", allocationSize = 1)
+    private Long id;
 
     private Integer nit;
 
@@ -30,8 +31,7 @@ public class Proveedor {
     @OneToMany(mappedBy = "proveedor")
     private List<OrdenDeCompra> ordenesDeCompra;
 
-    public Proveedor()
-    {;}
+    public Proveedor() {}
 
     public Proveedor(Integer nit, String nombre, String direccion, String personaContacto, String telefonoContacto) {
         this.nit = nit;
@@ -39,6 +39,14 @@ public class Proveedor {
         this.direccion = direccion;
         this.personaContacto = personaContacto;
         this.telefonoContacto = telefonoContacto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getNit() {
@@ -81,14 +89,6 @@ public class Proveedor {
         this.telefonoContacto = telefonoContacto;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public List<OrdenDeCompra> getOrdenesDeCompra() {
         return ordenesDeCompra;
     }
@@ -96,5 +96,4 @@ public class Proveedor {
     public void setOrdenesDeCompra(List<OrdenDeCompra> ordenesDeCompra) {
         this.ordenesDeCompra = ordenesDeCompra;
     }
-    
 }

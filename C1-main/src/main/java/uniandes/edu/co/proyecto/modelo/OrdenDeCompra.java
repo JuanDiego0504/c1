@@ -18,28 +18,26 @@ public class OrdenDeCompra {
     private Integer id;
 
     private Integer cantidadProducto;
-
     private Integer precioProducto;
-
     private Date fechaEntregaEsperada;
 
     @ManyToOne
-    @JoinColumn(name = "sucursal", nullable = false) // TODO Ver si se puede implementar la restricción desde SQL
+    @JoinColumn(name = "sucursal", nullable = false) 
     private Sucursal sucursal;
 
     @ManyToOne
-    @JoinColumn(name = "proveedor", nullable = false) // TODO Ver si se puede implementar la restricción desde SQL
+    @JoinColumn(name = "proveedor", nullable = false) 
     private Proveedor proveedor;
 
     @ManyToOne
-    @JoinColumn(name = "producto", nullable = false) // TODO Ver si se puede implementar la restricción desde SQL
+    @JoinColumn(name = "producto", nullable = false) 
     private Producto producto;
 
-    public OrdenDeCompra()
-    {;}
+    // Constructor sin parámetros
+    public OrdenDeCompra() {}
 
-    public OrdenDeCompra(Integer cantidadProducto, Integer precioProducto, Sucursal sucursal, Proveedor proveedor,
-            Producto producto) {
+    // Constructor que acepta todos los parámetros menos el id
+    public OrdenDeCompra(Integer cantidadProducto, Integer precioProducto, Sucursal sucursal, Proveedor proveedor, Producto producto) {
         this.cantidadProducto = cantidadProducto;
         this.precioProducto = precioProducto;
         this.sucursal = sucursal;
@@ -47,6 +45,12 @@ public class OrdenDeCompra {
         this.producto = producto;
     }
 
+    // Constructor que acepta solo el id (necesario para el controlador)
+    public OrdenDeCompra(Integer id) {
+        this.id = id;
+    }
+
+    // Getters y setters
     public Integer getId() {
         return id;
     }
@@ -69,6 +73,14 @@ public class OrdenDeCompra {
 
     public void setPrecioProducto(Integer precioProducto) {
         this.precioProducto = precioProducto;
+    }
+
+    public Date getFechaEntregaEsperada() {
+        return fechaEntregaEsperada;
+    }
+
+    public void setFechaEntregaEsperada(Date fechaEntregaEsperada) {
+        this.fechaEntregaEsperada = fechaEntregaEsperada;
     }
 
     public Sucursal getSucursal() {
@@ -94,13 +106,4 @@ public class OrdenDeCompra {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-
-    public Date getFechaEntregaEsperada() {
-        return fechaEntregaEsperada;
-    }
-
-    public void setFechaEntregaEsperada(Date fechaEntregaEsperada) {
-        this.fechaEntregaEsperada = fechaEntregaEsperada;
-    }
-    
 }

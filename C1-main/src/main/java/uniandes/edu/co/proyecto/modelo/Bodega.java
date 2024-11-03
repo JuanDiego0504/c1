@@ -4,8 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,20 +17,16 @@ public class Bodega {
     private Integer id;
     
     private String nombre;
-
     private Integer tamanio;
 
     @OneToOne
     @JoinColumn(name= "sucursal", referencedColumnName = "id")
     private Sucursal sucursal;
 
-    public Bodega()
-    {;}
+    public Bodega() {}
 
-    public Bodega(String nombre, Integer tamanio, Sucursal sucursal){
-        this.nombre = nombre;
-        this.tamanio = tamanio;
-        this.sucursal = sucursal;
+    public Bodega(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -64,5 +60,4 @@ public class Bodega {
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
     }
-    
 }
