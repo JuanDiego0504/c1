@@ -28,6 +28,18 @@ public class CategoriaController {
         return categoria.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/codigo/{codigo}")
+    public ResponseEntity<Categoria> getCategoriaByCodigo(@PathVariable Integer codigo) {
+        Categoria categoria = categoriaRepository.findByCodigo(codigo);
+        return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<Categoria> getCategoriaByNombre(@PathVariable String nombre) {
+        Categoria categoria = categoriaRepository.findByNombre(nombre);
+        return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/new")
     public ResponseEntity<String> crearCategoria(@RequestBody Categoria categoria) {
         try {

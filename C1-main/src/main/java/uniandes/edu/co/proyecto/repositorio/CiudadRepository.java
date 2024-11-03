@@ -2,7 +2,7 @@ package uniandes.edu.co.proyecto.repositorio;
 
 import java.util.Collection;
 
-import  org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import uniandes.edu.co.proyecto.modelo.Ciudad;
 
-public interface CiudadRepository extends JpaRepository <Ciudad, Integer> {
+public interface CiudadRepository extends JpaRepository<Ciudad, Integer> {
 
     @Query(value = "SELECT * FROM ciudades", nativeQuery = true)
     Collection<Ciudad> darCiudades();
@@ -25,8 +25,8 @@ public interface CiudadRepository extends JpaRepository <Ciudad, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE ciudades SET nombre= :nombre, tamanio= :tamanio, sucursal= :sucursal WHERE id =:id", nativeQuery = true)
-    void actualizarCiudad(@Param("id") Integer id,@Param("nombre") String nombre);
+    @Query(value = "UPDATE ciudades SET nombre= :nombre WHERE id = :id", nativeQuery = true) // Campos innecesarios eliminados
+    void actualizarCiudad(@Param("id") Integer id, @Param("nombre") String nombre);
 
     @Modifying
     @Transactional

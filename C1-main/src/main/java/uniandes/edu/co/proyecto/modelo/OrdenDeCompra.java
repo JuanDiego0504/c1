@@ -1,6 +1,7 @@
 package uniandes.edu.co.proyecto.modelo;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,8 @@ public class OrdenDeCompra {
     private Integer cantidadProducto;
     private Integer precioProducto;
     private Date fechaEntregaEsperada;
+    private Date fechaCreacion; // Fecha de creación de la orden, asignada automáticamente
+    private String estado; // Estado de la orden, inicialmente "vigente"
 
     @ManyToOne
     @JoinColumn(name = "sucursal", nullable = false) 
@@ -34,12 +37,17 @@ public class OrdenDeCompra {
     private Producto producto;
 
     // Constructor sin parámetros
-    public OrdenDeCompra() {}
+    public OrdenDeCompra() {
+        this.fechaCreacion = Date.valueOf(LocalDate.now()); // Fecha actual asignada automáticamente
+        this.estado = "vigente"; // Estado inicial de la orden
+    }
 
     // Constructor que acepta todos los parámetros menos el id
-    public OrdenDeCompra(Integer cantidadProducto, Integer precioProducto, Sucursal sucursal, Proveedor proveedor, Producto producto) {
+    public OrdenDeCompra(Integer cantidadProducto, Integer precioProducto, Date fechaEntregaEsperada, Sucursal sucursal, Proveedor proveedor, Producto producto) {
+        this();
         this.cantidadProducto = cantidadProducto;
         this.precioProducto = precioProducto;
+        this.fechaEntregaEsperada = fechaEntregaEsperada;
         this.sucursal = sucursal;
         this.proveedor = proveedor;
         this.producto = producto;
@@ -81,6 +89,18 @@ public class OrdenDeCompra {
 
     public void setFechaEntregaEsperada(Date fechaEntregaEsperada) {
         this.fechaEntregaEsperada = fechaEntregaEsperada;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Sucursal getSucursal() {

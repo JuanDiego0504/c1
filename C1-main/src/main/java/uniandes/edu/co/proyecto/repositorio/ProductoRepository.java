@@ -21,7 +21,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO productos (id, codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria) VALUES (productos_SEQ.nextval, :codigoDeBarras, :nombre, :costoEnBodega, :precioUnitario, :presentacion, :cantidadPresentacion, :unidadPresentacion, :especEmpaque, :fechaVencimiento, :categoria)", nativeQuery = true)
+    @Query(value = "INSERT INTO productos (id, codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria) VALUES (productos_SEQ.nextval, :codigoDeBarras, :nombre, :costoEnBodega, :precioUnitario, :presentacion, :cantidadPresentacion, :unidadPresentacion, :especEmpaque, :fechaVencimiento, :categoriaId)", nativeQuery = true)
     void insertarProducto(@Param("codigoDeBarras") Integer codigoDeBarras,
                           @Param("nombre") String nombre,
                           @Param("costoEnBodega") Integer costoEnBodega,
@@ -31,11 +31,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
                           @Param("unidadPresentacion") String unidadPresentacion,
                           @Param("especEmpaque") String especEmpaque,
                           @Param("fechaVencimiento") Date fechaVencimiento,
-                          @Param("categoria") Integer categoria);
+                          @Param("categoriaId") Integer categoriaId);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE productos SET codigoDeBarras = :codigoDeBarras, nombre = :nombre, costoEnBodega = :costoEnBodega, precioUnitario = :precioUnitario, presentacion = :presentacion, cantidadPresentacion = :cantidadPresentacion, unidadPresentacion = :unidadPresentacion, especEmpaque = :especEmpaque, fechaVencimiento = :fechaVencimiento, categoria = :categoria WHERE id = :id", nativeQuery = true)
+    @Query(value = "UPDATE productos SET codigoDeBarras = :codigoDeBarras, nombre = :nombre, costoEnBodega = :costoEnBodega, precioUnitario = :precioUnitario, presentacion = :presentacion, cantidadPresentacion = :cantidadPresentacion, unidadPresentacion = :unidadPresentacion, especEmpaque = :especEmpaque, fechaVencimiento = :fechaVencimiento, categoria = :categoriaId WHERE id = :id", nativeQuery = true)
     void actualizarProducto(@Param("id") Long id,
                             @Param("codigoDeBarras") Integer codigoDeBarras,
                             @Param("nombre") String nombre,
@@ -46,7 +46,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
                             @Param("unidadPresentacion") String unidadPresentacion,
                             @Param("especEmpaque") String especEmpaque,
                             @Param("fechaVencimiento") Date fechaVencimiento,
-                            @Param("categoria") Integer categoria);
+                            @Param("categoriaId") Integer categoriaId);
 
     @Modifying
     @Transactional
