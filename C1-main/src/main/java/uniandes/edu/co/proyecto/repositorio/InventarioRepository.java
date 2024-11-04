@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import uniandes.edu.co.proyecto.modelo.Inventario;
 import uniandes.edu.co.proyecto.modelo.InventarioPK;
+import uniandes.edu.co.proyecto.modelo.Sucursal;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public interface InventarioRepository extends JpaRepository<Inventario, Inventar
     // Transacción para registrar el ingreso de productos a la bodega (actualiza inventario y costo promedio)
     @Transactional
     @Modifying
-    @Query("UPDATE Inventario i SET i.cantidad = i.cantidad + :cantidad, " +
-           "i.costoPromedio = ((i.costoPromedio * i.cantidad + :nuevoCosto * :cantidad) / (i.cantidad + :cantidad)) " +
+    @Query("UPDATE Inventario i SET i.costoPromedio = ((i.costoPromedio * i.capacidad + :nuevoCosto * :cantidad) / (i.capacidad + :cantidad)), " +
+           "i.capacidad = i.capacidad + :cantidad " +
            "WHERE i.pk.id_producto.id = :idProducto AND i.pk.id_bodega.id = :idBodega")
     void actualizarInventario(
         @Param("idProducto") Integer idProducto,
@@ -29,4 +30,22 @@ public interface InventarioRepository extends JpaRepository<Inventario, Inventar
         @Param("cantidad") Integer cantidad,
         @Param("nuevoCosto") Double nuevoCosto
     );
-}
+
+    // Consulta para el RFC3: inventario de productos en una bodega específica
+    @Query("SELECT i FROM Inventario i WHERE i.pk.id_bodega.id = :idBodega AND i.pk.id_bodega.sucursal.id = :idSucursal")
+    List<Inventario> findInventarioPorSucursalYBodega(
+        @Param("idSucursal") Integer idSucursal,
+        @Param("idBodega") Integer idBodega
+    );
+
+    // Consulta para RFC4: Obtener sucursales con disponibilidad de un producto por id o nombre
+    @Query("SELECT DISTINCT s FROM Inventario i " +
+           "JOIN i.pk.id_bodega b " +
+           "JOIN b.sucursal s " +
+           "WHERE (i.pk.id_producto.id = :idProducto OR i.pk.id_producto.nombre = :nombreProducto) " +
+           "AND i.capacidad > 0")
+    List<Sucursal> findSucursalesConDisponibilidadDeProducto(
+        @Param("idProducto") Integer idProducto,
+        @Param("nombreProducto") String nombreProducto
+    );
+} 

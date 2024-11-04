@@ -2,7 +2,7 @@ package uniandes.edu.co.proyecto.repositorio;
 
 import java.util.Collection;
 
-import  org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import uniandes.edu.co.proyecto.modelo.Bodega;
 
-public interface BodegaRepository extends JpaRepository <Bodega, Integer> {
+public interface BodegaRepository extends JpaRepository<Bodega, Integer> {
 
     @Query(value = "SELECT * FROM bodegas", nativeQuery = true)
     Collection<Bodega> darBodegas();
@@ -32,4 +32,14 @@ public interface BodegaRepository extends JpaRepository <Bodega, Integer> {
     @Transactional
     @Query(value = "DELETE FROM bodegas WHERE id = :id", nativeQuery = true)
     void eliminarBodega(@Param("id") Integer id);
+
+    @Query(value = "SELECT b.id, b.nombre, " +
+    "COALESCE(SUM(pb.cantidad) / NULLIF(b.tamanio, 0), 0) AS indiceOcupacion " +
+    "FROM bodegas b " +
+    "JOIN productos_bodegas pb ON b.id = pb.bodega_id " +
+    "WHERE b.sucursal = :sucursalId " +
+    "GROUP BY b.id, b.nombre, b.tamanio", nativeQuery = true)
+Collection<Object[]> calcularIndiceOcupacion(@Param("sucursalId") Integer sucursalId);
+
+
 }

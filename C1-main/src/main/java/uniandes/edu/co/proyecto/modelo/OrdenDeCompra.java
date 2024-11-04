@@ -2,44 +2,58 @@ package uniandes.edu.co.proyecto.modelo;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ordenesDeCompra")
+@Table(name = "ORDENESDECOMPRA")
 public class OrdenDeCompra {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ordenesdecompra_generator")
+    @SequenceGenerator(name = "ordenesdecompra_generator", sequenceName = "ORDENESDECOMPRA_SEQ", allocationSize = 1)
     private Integer id;
 
+    @Column(name = "CANTIDADPRODUCTO")
     private Integer cantidadProducto;
+
+    @Column(name = "PRECIOPRODUCTO")
     private Integer precioProducto;
+
+    @Column(name = "FECHAENTREGAESPERADA")
     private Date fechaEntregaEsperada;
-    private Date fechaCreacion; // Fecha de creación de la orden, asignada automáticamente
-    private String estado; // Estado de la orden, inicialmente "vigente"
+
+    @Column(name = "FECHACREACION")
+    private Date fechaCreacion;
+
+    private String estado;
 
     @ManyToOne
-    @JoinColumn(name = "sucursal", nullable = false) 
+    @JoinColumn(name = "SUCURSAL", nullable = false) 
+    @JsonBackReference // Añadido para evitar recursión infinita
     private Sucursal sucursal;
 
     @ManyToOne
-    @JoinColumn(name = "proveedor", nullable = false) 
+    @JoinColumn(name = "PROVEEDOR", nullable = false) 
+    @JsonBackReference // Añadido para evitar recursión infinita
     private Proveedor proveedor;
 
     @ManyToOne
-    @JoinColumn(name = "producto", nullable = false) 
+    @JoinColumn(name = "PRODUCTO", nullable = false) 
     private Producto producto;
 
     // Constructor sin parámetros
     public OrdenDeCompra() {
-        this.fechaCreacion = Date.valueOf(LocalDate.now()); // Fecha actual asignada automáticamente
-        this.estado = "vigente"; // Estado inicial de la orden
+        this.fechaCreacion = Date.valueOf(LocalDate.now());
+        this.estado = "vigente";
     }
 
     // Constructor que acepta todos los parámetros menos el id

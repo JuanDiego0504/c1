@@ -69,4 +69,16 @@ public class BodegaController {
             return new ResponseEntity<>("Error al eliminar la bodega", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // RFC1: Obtener el índice de ocupación de cada bodega de una sucursal
+    @GetMapping("/ocupacion")
+    public ResponseEntity<?> obtenerIndiceOcupacion(@RequestParam Integer sucursalId) {
+        try {
+            Collection<Object[]> resultados = bodegaRepository.calcularIndiceOcupacion(sucursalId);
+            return new ResponseEntity<>(resultados, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al obtener el índice de ocupación: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 }

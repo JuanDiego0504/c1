@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="bodegas")
+@Table(name="BODEGAS")  // Cambiado a mayúsculas para coincidir con la base de datos
 public class Bodega {
     
     @Id

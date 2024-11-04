@@ -1,6 +1,7 @@
 package uniandes.edu.co.proyecto.modelo;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ public class Sucursal {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sucursal_generator")
     @SequenceGenerator(name = "sucursal_generator", sequenceName = "sucursales_SEQ", allocationSize = 1)
-    private Integer id;  // Cambiado a Integer
+    private Integer id;
 
     private String nombre;
     private String direccion;
@@ -30,6 +31,7 @@ public class Sucursal {
     private Ciudad ciudad;
 
     @OneToMany(mappedBy = "sucursal")
+    @JsonManagedReference // Para evitar recursión infinita
     private List<OrdenDeCompra> ordenesDeCompra;
 
     public Sucursal() {}
@@ -42,15 +44,16 @@ public class Sucursal {
         this.ciudad = ciudad;
     }
 
-    public Integer getId() {  // Cambiado a Integer
+    // Getters y Setters
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {  // Cambiado a Integer
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    // Getters y setters restantes
     public String getNombre() {
         return nombre;
     }

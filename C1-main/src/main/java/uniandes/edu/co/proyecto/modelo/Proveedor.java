@@ -1,6 +1,8 @@
 package uniandes.edu.co.proyecto.modelo;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,9 +12,9 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "proveedores")
+@Table(name = "PROVEEDORES")
 public class Proveedor {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedor_generator")
     @SequenceGenerator(name = "proveedor_generator", sequenceName = "proveedores_SEQ", allocationSize = 1)
@@ -24,11 +26,14 @@ public class Proveedor {
 
     private String direccion;
 
+    @Column(name = "PERSONACONTACTO")
     private String personaContacto;
 
+    @Column(name = "TELEFONOCONTACTO")
     private String telefonoContacto;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonManagedReference // Añadido para evitar recursión infinita
     private List<OrdenDeCompra> ordenesDeCompra;
 
     public Proveedor() {}
@@ -40,6 +45,8 @@ public class Proveedor {
         this.personaContacto = personaContacto;
         this.telefonoContacto = telefonoContacto;
     }
+
+    // Getters y Setters
 
     public Long getId() {
         return id;

@@ -21,7 +21,6 @@ CREATE TABLE SUCURSALES (
 
 CREATE SEQUENCE sucursales_seq START WITH 1 INCREMENT BY 1;
 
-
 CREATE OR REPLACE TRIGGER sucursales_before_insert
 BEFORE INSERT ON SUCURSALES
 FOR EACH ROW
@@ -97,14 +96,15 @@ END;
 /
 
 -- Creación de la tabla INVENTARIOS
-CREATE TABLE INVENTARIOS 
-(
-  ID_PRODUCTO INTEGER,
-  ID_BODEGA INTEGER,
-  COSTO_PROMEDIO NUMBER,
-  CAPACIDAD INTEGER,
-  NUMERO_REORDEN INTEGER,
-  CONSTRAINT INVENTARIOS_PK PRIMARY KEY (ID_PRODUCTO, ID_BODEGA)
+-- Creación de la tabla INVENTARIOS con la columna cantidad incluida
+CREATE TABLE INVENTARIOS (
+    ID_PRODUCTO INTEGER,
+    ID_BODEGA INTEGER,
+    COSTO_PROMEDIO NUMBER,
+    CAPACIDAD INTEGER,
+    NUMERO_REORDEN INTEGER,
+    CANTIDAD NUMBER(38), -- Añadido este campo
+    CONSTRAINT INVENTARIOS_PK PRIMARY KEY (ID_PRODUCTO, ID_BODEGA)
 );
 
 ALTER TABLE INVENTARIOS
@@ -126,12 +126,16 @@ ADD CONSTRAINT CK_I_CAPACIDAD
     CHECK (CAPACIDAD >= 0)
 ENABLE;
 
+ALTER TABLE INVENTARIOS ADD cantidad NUMBER(38);
+
 -- Creación de la tabla ordenesDeCompra
 CREATE TABLE ordenesDeCompra (
     id INTEGER PRIMARY KEY,
     cantidadProducto INTEGER NOT NULL,
     precioProducto INTEGER NOT NULL,
     fechaEntregaEsperada DATE,
+    fechaCreacion DATE, -- Fecha de creación
+    estado VARCHAR2(50 BYTE) DEFAULT 'vigente' NOT NULL, -- Estado inicial
     sucursal INTEGER NOT NULL,
     proveedor INTEGER NOT NULL,
     producto INTEGER NOT NULL,
@@ -147,6 +151,8 @@ BEFORE INSERT ON ordenesDeCompra
 FOR EACH ROW
 BEGIN
     SELECT ordenesDeCompra_seq.NEXTVAL INTO :NEW.id FROM dual;
+    -- Asignación automática de la fecha de creación
+    :NEW.fechaCreacion := SYSDATE;
 END;
 /
 
@@ -159,6 +165,15 @@ CREATE TABLE PEDIDOS (
     PRIMARY KEY (id_producto, id_ordenDeCompra, fechaEntrega, estado),
     FOREIGN KEY (id_producto) REFERENCES productos(id),
     FOREIGN KEY (id_ordenDeCompra) REFERENCES ordenesDeCompra(id)
+);
+
+CREATE TABLE productos_bodegas (
+    bodega_id NUMBER(38) NOT NULL,
+    producto_id NUMBER(38) NOT NULL,
+    cantidad NUMBER(38),
+    PRIMARY KEY (bodega_id, producto_id),
+    FOREIGN KEY (bodega_id) REFERENCES bodegas(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
 );
 
 COMMIT;

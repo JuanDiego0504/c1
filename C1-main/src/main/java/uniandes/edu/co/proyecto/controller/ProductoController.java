@@ -1,7 +1,6 @@
 package uniandes.edu.co.proyecto.controller;
 
 import uniandes.edu.co.proyecto.modelo.Producto;
-import uniandes.edu.co.proyecto.modelo.Categoria;
 import uniandes.edu.co.proyecto.repositorio.ProductoRepository;
 import uniandes.edu.co.proyecto.repositorio.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -71,5 +71,22 @@ public class ProductoController {
         }
         productoRepository.deleteById(id);
         return new ResponseEntity<>("Producto eliminado exitosamente", HttpStatus.OK);
+    }
+
+    // RFC2: Buscar productos por características específicas
+    @GetMapping("/buscar")
+    public ResponseEntity<Collection<Producto>> buscarProductosPorCaracteristicas(
+            @RequestParam(required = false) Integer categoriaId,
+            @RequestParam(required = false) Integer precioMin,
+            @RequestParam(required = false) Integer precioMax,
+            @RequestParam(required = false) Date fechaVencimiento,
+            @RequestParam(required = false) Integer sucursalId) {
+        try {
+            Collection<Producto> productos = productoRepository.findProductosPorCaracteristicas(
+                    categoriaId, precioMin, precioMax, fechaVencimiento, sucursalId);
+            return new ResponseEntity<>(productos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
