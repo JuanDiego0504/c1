@@ -1,179 +1,155 @@
--- Creación del secuenciador principal
-CREATE SEQUENCE superandes_sequence START WITH 1 INCREMENT BY 1;
+-- Datos para la tabla CIUDADES
+INSERT INTO CIUDADES (ID, NOMBRE) VALUES (1, 'Bogotá');
+INSERT INTO CIUDADES (ID, NOMBRE) VALUES (2, 'Medellín');
+INSERT INTO CIUDADES (ID, NOMBRE) VALUES (3, 'Cali');
+INSERT INTO CIUDADES (ID, NOMBRE) VALUES (4, 'Barranquilla');
+INSERT INTO CIUDADES (ID, NOMBRE) VALUES (5, 'Cartagena');
 
--- Creación de la tabla CIUDADES
-CREATE TABLE CIUDADES (
-    ID NUMBER PRIMARY KEY,
-    NOMBRE VARCHAR2(255 BYTE) NOT NULL,
-    CONSTRAINT UN_CIUDAD_NOMBRE UNIQUE (NOMBRE)
-);
+-- Datos para la tabla CATEGORIAS
+INSERT INTO CATEGORIAS (ID, CODIGO, NOMBRE, DESCRIPCION, CARACTERISTICAS_ALMACENAMIENTO)
+VALUES (1, 100, 'Electrónica', 'Dispositivos electrónicos', 'Almacenaje en ambiente seco');
+INSERT INTO CATEGORIAS (ID, CODIGO, NOMBRE, DESCRIPCION, CARACTERISTICAS_ALMACENAMIENTO)
+VALUES (2, 200, 'Ropa', 'Vestimenta de moda', 'Almacenaje en racks');
+INSERT INTO CATEGORIAS (ID, CODIGO, NOMBRE, DESCRIPCION, CARACTERISTICAS_ALMACENAMIENTO)
+VALUES (3, 300, 'Alimentos', 'Comestibles', 'Refrigeración necesaria');
+INSERT INTO CATEGORIAS (ID, CODIGO, NOMBRE, DESCRIPCION, CARACTERISTICAS_ALMACENAMIENTO)
+VALUES (4, 400, 'Muebles', 'Mobiliario de hogar', 'Almacenaje en ambiente seco');
+INSERT INTO CATEGORIAS (ID, CODIGO, NOMBRE, DESCRIPCION, CARACTERISTICAS_ALMACENAMIENTO)
+VALUES (5, 500, 'Juguetes', 'Juguetes para niños', 'Almacenaje en ambiente seco');
 
--- Creación de la tabla SUCURSALES
-CREATE TABLE SUCURSALES (
-    id INTEGER PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    direccion VARCHAR(255),
-    telefono VARCHAR(15),
-    tamanio INTEGER,
-    ciudad INTEGER,
-    FOREIGN KEY (ciudad) REFERENCES ciudades(id)
-);
+-- Datos para la tabla SUCURSALES
+INSERT INTO SUCURSALES (nombre, direccion, telefono, tamanio, ciudad)
+VALUES ('Sucursal Central', 'Calle 1', '3001234567', 600, 1);
+INSERT INTO SUCURSALES (nombre, direccion, telefono, tamanio, ciudad)
+VALUES ('Sucursal Norte', 'Calle 2', '3009876543', 400, 2);
+INSERT INTO SUCURSALES (nombre, direccion, telefono, tamanio, ciudad)
+VALUES ('Sucursal Sur', 'Calle 3', '3006543211', 500, 3);
+INSERT INTO SUCURSALES (nombre, direccion, telefono, tamanio, ciudad)
+VALUES ('Sucursal Este', 'Calle 4', '3001122334', 450, 4);
+INSERT INTO SUCURSALES (nombre, direccion, telefono, tamanio, ciudad)
+VALUES ('Sucursal Oeste', 'Calle 5', '3002233445', 550, 5);
 
-CREATE SEQUENCE sucursales_seq START WITH 1 INCREMENT BY 1;
+-- Datos para la tabla PROVEEDORES
+INSERT INTO PROVEEDORES (nit, nombre, direccion, personaContacto, telefonoContacto)
+VALUES (123456789, 'Proveedor A', 'Calle 10', 'Carlos Pérez', '3101234567');
+INSERT INTO PROVEEDORES (nit, nombre, direccion, personaContacto, telefonoContacto)
+VALUES (987654321, 'Proveedor B', 'Calle 11', 'Laura Gómez', '3109876543');
+INSERT INTO PROVEEDORES (nit, nombre, direccion, personaContacto, telefonoContacto)
+VALUES (192837465, 'Proveedor C', 'Calle 12', 'Ana Martínez', '3106543211');
+INSERT INTO PROVEEDORES (nit, nombre, direccion, personaContacto, telefonoContacto)
+VALUES (564738291, 'Proveedor D', 'Calle 13', 'Juan López', '3101122334');
+INSERT INTO PROVEEDORES (nit, nombre, direccion, personaContacto, telefonoContacto)
+VALUES (374859201, 'Proveedor E', 'Calle 14', 'Sofía Ramírez', '3102233445');
 
-CREATE OR REPLACE TRIGGER sucursales_before_insert
-BEFORE INSERT ON SUCURSALES
-FOR EACH ROW
-BEGIN
-    SELECT sucursales_seq.NEXTVAL INTO :NEW.id FROM dual;
-END;
-/
+-- Datos para la tabla PRODUCTOS
+INSERT INTO PRODUCTOS (codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria)
+VALUES (123456789, 'Producto A', 5000, 10000, 'Caja', 20, 'Unidad', 'Cartón', TO_DATE('2025-05-01', 'YYYY-MM-DD'), 1);
+INSERT INTO PRODUCTOS (codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria)
+VALUES (987654321, 'Producto B', 3000, 6000, 'Botella', 12, 'Litro', 'Plástico', TO_DATE('2024-12-15', 'YYYY-MM-DD'), 2);
+INSERT INTO PRODUCTOS (codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria)
+VALUES (192837465, 'Producto C', 8000, 16000, 'Saco', 50, 'Kg', 'Papel', TO_DATE('2023-11-30', 'YYYY-MM-DD'), 3);
+INSERT INTO PRODUCTOS (codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria)
+VALUES (564738291, 'Producto D', 7000, 14000, 'Caja', 30, 'Unidad', 'Cartón', TO_DATE('2024-07-01', 'YYYY-MM-DD'), 4);
+INSERT INTO PRODUCTOS (codigoDeBarras, nombre, costoEnBodega, precioUnitario, presentacion, cantidadPresentacion, unidadPresentacion, especEmpaque, fechaVencimiento, categoria)
+VALUES (374859201, 'Producto E', 9000, 18000, 'Botella', 24, 'Litro', 'Vidrio', TO_DATE('2023-10-25', 'YYYY-MM-DD'), 5);
 
--- Creación de la tabla BODEGAS
-CREATE TABLE BODEGAS (
-    ID NUMBER PRIMARY KEY,
-    NOMBRE VARCHAR2(255 BYTE) NOT NULL,
-    TAMANIO NUMBER CHECK (TAMANIO > 0),
-    SUCURSAL NUMBER,
-    CONSTRAINT FK_SUCURSAL FOREIGN KEY (SUCURSAL) REFERENCES SUCURSALES(ID) ON DELETE CASCADE,
-    CONSTRAINT UN_BODEGA_NOMBRE UNIQUE (NOMBRE)
-);
+-- Datos para la tabla BODEGAS
+INSERT INTO BODEGAS (ID, NOMBRE, TAMANIO, SUCURSAL)
+VALUES (superandes_sequence.NEXTVAL, 'Bodega Central', 500, 1);
+INSERT INTO BODEGAS (ID, NOMBRE, TAMANIO, SUCURSAL)
+VALUES (superandes_sequence.NEXTVAL, 'Bodega Norte', 300, 2);
+INSERT INTO BODEGAS (ID, NOMBRE, TAMANIO, SUCURSAL)
+VALUES (superandes_sequence.NEXTVAL, 'Bodega Sur', 400, 3);
+INSERT INTO BODEGAS (ID, NOMBRE, TAMANIO, SUCURSAL)
+VALUES (superandes_sequence.NEXTVAL, 'Bodega Este', 350, 4);
+INSERT INTO BODEGAS (ID, NOMBRE, TAMANIO, SUCURSAL)
+VALUES (superandes_sequence.NEXTVAL, 'Bodega Oeste', 450, 5);
 
--- Creación de la tabla CATEGORIAS
-CREATE TABLE CATEGORIAS (
-    ID NUMBER PRIMARY KEY,
-    CODIGO NUMBER,
-    NOMBRE VARCHAR2(255 BYTE) NOT NULL,
-    DESCRIPCION VARCHAR2(255 BYTE),
-    CARACTERISTICAS_ALMACENAMIENTO VARCHAR2(255 BYTE),
-    CONSTRAINT UN_CATEGORIA_NOMBRE UNIQUE (NOMBRE)
-);
+-- Datos para la tabla INVENTARIOS
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (1, 1, 5500, 200, 20, 100);
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (2, 2, 3500, 150, 10, 50);
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (3, 3, 8200, 100, 15, 75);
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (4, 4, 7200, 250, 18, 120);
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (5, 5, 9500, 300, 25, 200);
 
--- Creación de la tabla PRODUCTOS
-CREATE TABLE PRODUCTOS (
-    id INTEGER PRIMARY KEY,
-    codigoDeBarras INTEGER,
-    nombre VARCHAR(255) NOT NULL,
-    costoEnBodega INTEGER,
-    precioUnitario INTEGER,
-    presentacion VARCHAR(100),
-    cantidadPresentacion INTEGER,
-    unidadPresentacion VARCHAR(50),
-    especEmpaque VARCHAR(100),
-    fechaVencimiento DATE,
-    categoria INTEGER,
-    FOREIGN KEY (categoria) REFERENCES categorias(id)
-);
+-- Datos para la tabla ORDENESDECOMPRA
+INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
+VALUES (100, 100000, TO_DATE('2023-10-01', 'YYYY-MM-DD'), 1, 1, 1);
+INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
+VALUES (200, 200000, TO_DATE('2023-11-01', 'YYYY-MM-DD'), 2, 2, 2);
+INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
+VALUES (150, 150000, TO_DATE('2023-12-01', 'YYYY-MM-DD'), 3, 3, 3);
+INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
+VALUES (250, 250000, TO_DATE('2024-01-01', 'YYYY-MM-DD'), 4, 4, 4);
+INSERT INTO ordenesDeCompra (cantidadProducto, precioProducto, fechaEntregaEsperada, sucursal, proveedor, producto)
+VALUES (300, 300000, TO_DATE('2024-02-01', 'YYYY-MM-DD'), 5, 5, 5);
 
-CREATE SEQUENCE productos_seq START WITH 1 INCREMENT BY 1;
+-- Datos para la tabla PEDIDOS
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (1, 1, TO_DATE('2023-10-15', 'YYYY-MM-DD'), 'En camino');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (2, 2, TO_DATE('2023-11-20', 'YYYY-MM-DD'), 'Entregado');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (3, 3, TO_DATE('2023-12-05', 'YYYY-MM-DD'), 'Pendiente');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (4, 4, TO_DATE('2024-01-10', 'YYYY-MM-DD'), 'En camino');
+INSERT INTO PEDIDOS (id_producto, id_ordenDeCompra, fechaEntrega, estado)
+VALUES (5, 5, TO_DATE('2024-02-15', 'YYYY-MM-DD'), 'Pendiente');
 
-CREATE OR REPLACE TRIGGER productos_before_insert
-BEFORE INSERT ON PRODUCTOS
-FOR EACH ROW
-BEGIN
-    SELECT productos_seq.NEXTVAL INTO :NEW.id FROM dual;
-END;
-/
+-- Datos para la tabla productos_bodegas
+INSERT INTO productos_bodegas (bodega_id, producto_id, cantidad)
+VALUES (1, 1, 50);
+INSERT INTO productos_bodegas (bodega_id, producto_id, cantidad)
+VALUES (2, 2, 30);
+INSERT INTO productos_bodegas (bodega_id, producto_id, cantidad)
+VALUES (3, 3, 40);
+INSERT INTO productos_bodegas (bodega_id, producto_id, cantidad)
+VALUES (4, 4, 25);
+INSERT INTO productos_bodegas (bodega_id, producto_id, cantidad)
+VALUES (5, 5, 15);
 
--- Creación de la tabla PROVEEDORES
-CREATE TABLE PROVEEDORES (
-    id INTEGER PRIMARY KEY,
-    nit INTEGER NOT NULL,
-    nombre VARCHAR(255) NOT NULL,
-    direccion VARCHAR(255),
-    personaContacto VARCHAR(100),
-    telefonoContacto VARCHAR(15)
-);
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (1, 1, 5500, 200, 20, 100);
 
-CREATE SEQUENCE proveedores_seq START WITH 1 INCREMENT BY 1;
 
-CREATE OR REPLACE TRIGGER proveedores_before_insert
-BEFORE INSERT ON PROVEEDORES
-FOR EACH ROW
-BEGIN
-    SELECT proveedores_seq.NEXTVAL INTO :NEW.id FROM dual;
-END;
-/
+UPDATE INVENTARIOS SET CANTIDAD = 5 WHERE ID_PRODUCTO = 1 AND ID_BODEGA = 1;
+UPDATE INVENTARIOS SET CANTIDAD = 8 WHERE ID_PRODUCTO = 2 AND ID_BODEGA = 2;
+UPDATE INVENTARIOS SET CANTIDAD = 10 WHERE ID_PRODUCTO = 3 AND ID_BODEGA = 3;
+UPDATE INVENTARIOS SET CANTIDAD = 15 WHERE ID_PRODUCTO = 4 AND ID_BODEGA = 4;
+UPDATE INVENTARIOS SET CANTIDAD = 10 WHERE ID_PRODUCTO = 5 AND ID_BODEGA = 5;
 
--- Creación de la tabla INVENTARIOS
--- Creación de la tabla INVENTARIOS con la columna cantidad incluida
-CREATE TABLE INVENTARIOS (
-    ID_PRODUCTO INTEGER,
-    ID_BODEGA INTEGER,
-    COSTO_PROMEDIO NUMBER,
-    CAPACIDAD INTEGER,
-    NUMERO_REORDEN INTEGER,
-    CANTIDAD NUMBER(38), -- Añadido este campo
-    CONSTRAINT INVENTARIOS_PK PRIMARY KEY (ID_PRODUCTO, ID_BODEGA)
-);
+-- Datos para la tabla DOCUMENTOS_INGRESO
 
-ALTER TABLE INVENTARIOS
-ADD CONSTRAINT fk_i_productos
-    FOREIGN KEY (ID_PRODUCTO)
-    REFERENCES PRODUCTOS(ID)
-    ON DELETE CASCADE
-ENABLE;
+-- Documento de ingreso para la Bodega Central (ID de bodega 1) y Sucursal Central (ID de sucursal 1)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-001', SYSDATE - 5, 1, 1); -- Fecha hace 5 días
 
-ALTER TABLE INVENTARIOS
-ADD CONSTRAINT fk_i_bodegas
-    FOREIGN KEY (ID_BODEGA)
-    REFERENCES BODEGAS(ID)
-    ON DELETE CASCADE
-ENABLE;
+-- Documento de ingreso para la Bodega Norte (ID de bodega 2) y Sucursal Norte (ID de sucursal 2)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-002', SYSDATE - 10, 2, 2); -- Fecha hace 10 días
 
-ALTER TABLE INVENTARIOS
-ADD CONSTRAINT CK_I_CAPACIDAD
-    CHECK (CAPACIDAD >= 0)
-ENABLE;
+-- Documento de ingreso para la Bodega Sur (ID de bodega 3) y Sucursal Sur (ID de sucursal 3)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-003', SYSDATE - 20, 3, 3); -- Fecha hace 20 días
 
-ALTER TABLE INVENTARIOS ADD cantidad NUMBER(38);
+-- Documento de ingreso para la Bodega Este (ID de bodega 4) y Sucursal Este (ID de sucursal 4)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-004', SYSDATE - 25, 4, 4); -- Fecha hace 25 días
 
--- Creación de la tabla ordenesDeCompra
-CREATE TABLE ordenesDeCompra (
-    id INTEGER PRIMARY KEY,
-    cantidadProducto INTEGER NOT NULL,
-    precioProducto INTEGER NOT NULL,
-    fechaEntregaEsperada DATE,
-    fechaCreacion DATE, -- Fecha de creación
-    estado VARCHAR2(50 BYTE) DEFAULT 'vigente' NOT NULL, -- Estado inicial
-    sucursal INTEGER NOT NULL,
-    proveedor INTEGER NOT NULL,
-    producto INTEGER NOT NULL,
-    FOREIGN KEY (sucursal) REFERENCES sucursales(id) ON DELETE CASCADE,
-    FOREIGN KEY (proveedor) REFERENCES proveedores(id) ON DELETE CASCADE,
-    FOREIGN KEY (producto) REFERENCES productos(id) ON DELETE CASCADE
-);
+-- Documento de ingreso para la Bodega Oeste (ID de bodega 5) y Sucursal Oeste (ID de sucursal 5)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-005', SYSDATE - 29, 5, 5); -- Fecha hace 29 días
 
-CREATE SEQUENCE ordenesDeCompra_seq START WITH 1 INCREMENT BY 1;
-
-CREATE OR REPLACE TRIGGER ordenesDeCompra_before_insert
-BEFORE INSERT ON ordenesDeCompra
-FOR EACH ROW
-BEGIN
-    SELECT ordenesDeCompra_seq.NEXTVAL INTO :NEW.id FROM dual;
-    -- Asignación automática de la fecha de creación
-    :NEW.fechaCreacion := SYSDATE;
-END;
-/
-
--- Creación de la tabla PEDIDOS
-CREATE TABLE PEDIDOS (
-    id_producto INTEGER NOT NULL,
-    id_ordenDeCompra INTEGER NOT NULL,
-    fechaEntrega DATE NOT NULL,
-    estado VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id_producto, id_ordenDeCompra, fechaEntrega, estado),
-    FOREIGN KEY (id_producto) REFERENCES productos(id),
-    FOREIGN KEY (id_ordenDeCompra) REFERENCES ordenesDeCompra(id)
-);
-
-CREATE TABLE productos_bodegas (
-    bodega_id NUMBER(38) NOT NULL,
-    producto_id NUMBER(38) NOT NULL,
-    cantidad NUMBER(38),
-    PRIMARY KEY (bodega_id, producto_id),
-    FOREIGN KEY (bodega_id) REFERENCES bodegas(id) ON DELETE CASCADE,
-    FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
-);
+-- Documento de ingreso antiguo (fuera de los últimos 30 días) para verificar filtrado
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-006', SYSDATE - 40, 1, 1); -- Fecha hace 40 días
 
 COMMIT;
+
+
+

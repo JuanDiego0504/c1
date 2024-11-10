@@ -18,7 +18,7 @@ public class ProyectoApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(ProyectoApplication.class, args);
     }
-
+ 
     @Override
     public void run(String... args) throws Exception {
         // Obtener todos los productos y mostrarlos en la consola

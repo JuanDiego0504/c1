@@ -116,6 +116,57 @@ VALUES (5, 5, 15);
 INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
 VALUES (1, 1, 5500, 200, 20, 100);
 
+-- Inserts adicionales para probar RFC5 con cantidades menores al nivel de reorden
+
+-- Producto A en Bodega Central con cantidad menor al número de reorden
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (1, 1, 5500, 200, 100, 50); -- Cantidad < Número de Reorden
+
+-- Producto B en Bodega Norte con cantidad menor al número de reorden
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (2, 2, 3500, 150, 60, 30); -- Cantidad < Número de Reorden
+
+-- Producto C en Bodega Sur con cantidad menor al número de reorden
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (3, 3, 8200, 100, 80, 40); -- Cantidad < Número de Reorden
+
+-- Producto D en Bodega Este con cantidad menor al número de reorden
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (4, 4, 7200, 250, 100, 20); -- Cantidad < Número de Reorden
+
+-- Producto E en Bodega Oeste con cantidad menor al número de reorden
+INSERT INTO INVENTARIOS (ID_PRODUCTO, ID_BODEGA, COSTO_PROMEDIO, CAPACIDAD, NUMERO_REORDEN, CANTIDAD)
+VALUES (5, 5, 9500, 300, 150, 70); -- Cantidad < Número de Reorden
+
+UPDATE INVENTARIOS SET CANTIDAD = 20 WHERE ID_PRODUCTO = 4 AND ID_BODEGA = 4;
+UPDATE INVENTARIOS SET CANTIDAD = 70 WHERE ID_PRODUCTO = 5 AND ID_BODEGA = 5;
+
+-- Datos para la tabla DOCUMENTOS_INGRESO
+
+-- Documento de ingreso para la Bodega Central (ID de bodega 1) y Sucursal Central (ID de sucursal 1)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-001', SYSDATE - 5, 1, 1); -- Fecha hace 5 días
+
+-- Documento de ingreso para la Bodega Norte (ID de bodega 2) y Sucursal Norte (ID de sucursal 2)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-002', SYSDATE - 10, 2, 2); -- Fecha hace 10 días
+
+-- Documento de ingreso para la Bodega Sur (ID de bodega 3) y Sucursal Sur (ID de sucursal 3)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-003', SYSDATE - 20, 3, 3); -- Fecha hace 20 días
+
+-- Documento de ingreso para la Bodega Este (ID de bodega 4) y Sucursal Este (ID de sucursal 4)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-004', SYSDATE - 25, 4, 4); -- Fecha hace 25 días
+
+-- Documento de ingreso para la Bodega Oeste (ID de bodega 5) y Sucursal Oeste (ID de sucursal 5)
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-005', SYSDATE - 29, 5, 5); -- Fecha hace 29 días
+
+-- Documento de ingreso antiguo (fuera de los últimos 30 días) para verificar filtrado
+INSERT INTO DOCUMENTOS_INGRESO (numero_documento, fecha, proveedor_id, bodega_id)
+VALUES ('DOC-ING-006', SYSDATE - 40, 1, 1); -- Fecha hace 40 días
+
 COMMIT;
 
 

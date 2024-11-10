@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -52,7 +53,7 @@ public class ProductoController {
         if (!productoRepository.existsById(id)) {
             return new ResponseEntity<>("Producto no encontrado", HttpStatus.NOT_FOUND);
         }
-        
+
         // Verificar si la categoría existe
         if (producto.getCategoria() != null && !categoriaRepository.existsById(producto.getCategoria().getId())) {
             return new ResponseEntity<>("Categoría no existe", HttpStatus.BAD_REQUEST);
@@ -88,5 +89,12 @@ public class ProductoController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // RFC5: Listar productos que requieren orden de compra debido a nivel bajo en inventario
+    @GetMapping("/orden-compra-necesaria")
+    public ResponseEntity<List<Object[]>> getProductosQueRequierenOrdenDeCompra() {
+        List<Object[]> results = productoRepository.findProductosConNivelBajo();
+        return ResponseEntity.ok(results);
     }
 }

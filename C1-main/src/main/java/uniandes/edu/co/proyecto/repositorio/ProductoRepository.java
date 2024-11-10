@@ -2,12 +2,14 @@ package uniandes.edu.co.proyecto.repositorio;
 
 import java.sql.Date;
 import java.util.Collection;
-
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+
 
 import uniandes.edu.co.proyecto.modelo.Producto;
 
@@ -72,4 +74,27 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
                                                          @Param("precioMax") Integer precioMax,
                                                          @Param("fechaVencimiento") Date fechaVencimiento,
                                                          @Param("sucursalId") Integer sucursalId);
+
+    // RFC5: Listar productos que requieren orden de compra debido a nivel bajo en inventario
+    @Query(value = "SELECT p.nombre, p.id, b.nombre as bodega_nombre, s.nombre as sucursal_nombre, pr.nombre as proveedor_nombre, i.cantidad " +
+                   "FROM inventarios i " +
+                   "JOIN productos p ON i.id_producto = p.id " +
+                   "JOIN bodegas b ON i.id_bodega = b.id " +
+                   "JOIN sucursales s ON b.sucursal = s.id " +
+                   "LEFT JOIN ordenesDeCompra oc ON oc.producto = p.id " +
+                   "LEFT JOIN proveedores pr ON oc.proveedor = pr.id " +
+                   "WHERE i.cantidad < i.numero_reorden", nativeQuery = true)
+    List<Object[]> findProductosConNivelBajo();
+
+    // RFC6: Consultar documentos de ingreso a bodega con transacción SERIALIZABLE y rollback en caso de error
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Query(value = "SELECT s.nombre AS sucursal_nombre, b.nombre AS bodega_nombre, d.numero_documento, d.fecha, p.nombre AS proveedor_nombre " +
+                   "FROM documentos_ingreso d " +
+                   "JOIN bodegas b ON d.id_bodega = b.id " +
+                   "JOIN sucursales s ON b.sucursal = s.id " +
+                   "JOIN proveedores p ON d.proveedor = p.id " +
+                   "WHERE d.fecha >= SYSDATE - 30 AND s.id = :sucursalId AND b.id = :bodegaId",
+           nativeQuery = true)
+    List<Object[]> findDocumentosIngresoRecientes(@Param("sucursalId") Long sucursalId,
+                                                  @Param("bodegaId") Long bodegaId);
 }

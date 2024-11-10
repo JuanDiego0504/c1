@@ -176,4 +176,25 @@ CREATE TABLE productos_bodegas (
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
 );
 
+CREATE TABLE DOCUMENTOS_INGRESO (
+    id INTEGER PRIMARY KEY,
+    numero_documento VARCHAR2(50) NOT NULL,
+    fecha DATE NOT NULL,
+    proveedor_id INTEGER NOT NULL,
+    bodega_id INTEGER NOT NULL,
+    FOREIGN KEY (proveedor_id) REFERENCES PROVEEDORES(id),
+    FOREIGN KEY (bodega_id) REFERENCES BODEGAS(id)
+);
+
+CREATE SEQUENCE documentos_ingreso_seq START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER documentos_ingreso_before_insert
+BEFORE INSERT ON DOCUMENTOS_INGRESO
+FOR EACH ROW
+BEGIN
+    SELECT documentos_ingreso_seq.NEXTVAL INTO :NEW.id FROM dual;
+END;
+/
+
+
 COMMIT;
